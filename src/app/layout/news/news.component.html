@@ -1,0 +1,45 @@
+<ng-template confirm>
+    <custom-modal-component></custom-modal-component>
+</ng-template>
+<div [@routerTransition] class="row col-lg-12">
+    <div class="col-lg-8">
+        <ngu-carousel [inputs]="carouselOne" (initData)="initDataFn($event)" (carouselLoad)="carouselTileLoad($event)" style="width: 100%;">
+            <ngu-tile NguCarouselItem *ngFor="let slider of sliders">
+                <img class="img-fluid mx-auto d-block" [src]="slider.imagePath" alt="Random first slide" width="100%" style="height:30vh;">
+                <h3>{{slider.label}}</h3>
+                <p>{{slider.text}}</p>
+            </ngu-tile>
+            <button NguCarouselPrev class='leftRs'>&lt;</button>
+            <button NguCarouselNext class='rightRs'>&gt;</button>
+        </ngu-carousel>
+        <div>
+            <button class="btn btn-primary fa fa-plus-circle fa-lg" aria-hidden="true" (click)="openAddNewDialog()" style="margin-right: 10px;margin-bottom: 10px;">&nbsp;Add New Carousel</button>
+            <button class="btn btn-primary fa fa-pencil fa-lg" aria-hidden="true" (click)="openEditDialog()" style="margin-bottom: 10px;">&nbsp;Edit or Delete Carousel</button>
+        </div>
+    </div>
+
+    <div class="col-lg-4" *ngFor="let tile of tiles">
+        <mat-card class="example-card">
+            <mat-card-header>
+                <div mat-card-avatar class="example-header-image"></div>
+                <mat-card-title>{{tile.label}}</mat-card-title>
+                <mat-card-subtitle>{{tile.cols}}</mat-card-subtitle>
+            </mat-card-header>
+            <img mat-card-image class="img-fluid mx-auto d-block" [src]="tile.imagePath" alt="Random first slide" width="100%" style="height:20vh;">
+            <mat-card-content>
+                <p style="word-wrap: break-word;">
+                    {{tile.text}}
+                </p>
+            </mat-card-content>
+            <mat-card-actions>
+                <button mat-button>LIKE</button>
+                <button mat-button>SHARE</button>
+            </mat-card-actions>
+        </mat-card>
+        <br>
+    </div>
+</div>
+<div>
+        <button class="btn btn-primary fa fa-plus-circle fa-lg" aria-hidden="true" (click)="openAddSectionDialog()" style="margin-right: 10px;">&nbsp;Add New Section</button>
+        <button class="btn btn-primary fa fa-pencil fa-lg" aria-hidden="true" (click)="openEditSectionDialog()">&nbsp;Edit or Delete Section</button>
+    </div>

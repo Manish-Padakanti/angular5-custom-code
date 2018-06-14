@@ -1,0 +1,32 @@
+$border-color: blue;
+.prof-form {
+    label {
+        width: 35%;
+        text-align: left;
+        display: inline;
+    }
+    input {
+        widows: 50%;
+    }
+    .prof-photo {
+        width: 100px;
+        height: 100px;
+        border: solid 1px $border-color;
+        font-size: 12px;
+        cursor: pointer;
+    }
+    .t-subj {
+        display: block;
+    }
+    .di {
+        display: inline-block;
+    }
+    .t-classes-pt {
+        vertical-align: middle;
+    }
+    .prof-act-btns .btn {
+        display: inline-block;
+        width: 75px;
+        margin: 0px 5px 0px 5px;
+    }
+}

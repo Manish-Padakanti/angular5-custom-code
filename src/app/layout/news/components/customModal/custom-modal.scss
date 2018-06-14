@@ -1,0 +1,13 @@
+@media (min-width: 576px) {
+    .modal-dialog {
+        max-width: unset;
+    }
+}
+
+.modal-content{
+    width: auto !important;
+}
+
+.modal-dialog.modal-dialog-centered{
+    max-width: unset;
+}

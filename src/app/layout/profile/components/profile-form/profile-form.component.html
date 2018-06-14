@@ -1,0 +1,282 @@
+<div class="container-fluid">
+<div class="page-title">
+    <ng-container *ngTemplateOutlet="title; context: userContext"></ng-container>
+    <ng-template #title let-user="userRole"><span>Create {{user}}</span></ng-template>
+</div>
+<form class="prof-form row" [formGroup]="profileForm" (ngSubmit)="onProfileSubmit()">
+    <div class="col-8">
+        <div class="form-group form-inline">
+            <label>First Name</label>
+            <input 
+                class="form-control" 
+                type="text" 
+                placeholder="First Name"
+                name="firstName"
+                id="firstName"
+                formControlName="firstName">
+        </div>
+        <div class="form-group form-inline">
+            <label>Middle Name</label>
+            <input 
+                class="form-control" 
+                type="text"
+                placeholder="Middle Name"
+                name="middleName"
+                id="middleName"                
+                formControlName="middleName">
+        </div>
+        <div class="form-group form-inline">
+            <label>Last Name</label>
+            <input 
+                class="form-control" 
+                type="text" placeholder="Last Name" 
+                name="lastName"
+                id="lastName"                
+                formControlName="lastName">
+        </div>
+        <div class="form-group form-inline">
+            <label>D.O.B</label>
+            <input class="form-control" type="date" placeholder="Date of Birth"
+                name="dob"
+                id="dob"
+                formControlName="dob">
+        </div>
+        <div class="form-group form-inline">
+            <label>Gender</label>
+            <label class="radio-inline">
+                <input type="radio" 
+                    name="gender" 
+                    id="gender" 
+                    value="M" 
+                    checked
+                    formControlName="gender">Male
+                <input type="radio" name="gender" id="gender" value="F"
+                    formControlName="gender">Female
+            </label>
+        </div>
+        <div *ngIf="isTutor">
+            <div class="form-group form-inline">
+                <label>Contact</label>
+                <select class="form-control" name="teacherMobileCode" id="teacherMobileCode" formControlName="teacherMobileCode">
+                    <option *ngFor="let c of countriesList" value="c.countryTelephoneCode">{{c.countryTelephoneCode}}</option>
+                </select>
+                <input class="form-control" type="text" placeholder="Contact Number"
+                    name="teacherContactNo"
+                    id="teacherContactNo"
+                    formControlName="teacherContactNo">
+            </div>
+            <div class="form-group form-inline">
+                <label>Email</label>
+                <input class="form-control" type="text" placeholder="Email"
+                    name="teacherEmailId"
+                    id="teacherEmailId"
+                    formControlName="teacherEmailId">
+            </div>
+            <div class="form-group form-inline">
+                <label>Emergency Contact Name</label>
+                <input class="form-control" type="text" placeholder="Contact Name"
+                    name="tEmergencyContactName"
+                    id="tEmergencyContactName"
+                    formControlName="tEmergencyContactName">
+            </div>
+            <div class="form-group form-inline">
+                <label>Emergency Contact Number</label>
+                <select class="form-control" name="tEmergencyContactCode" id="tEmergencyContactCode" formControlName="tEmergencyContactCode">
+                    <option *ngFor="let c of countriesList" value="c.countryTelephoneCode">{{c.countryTelephoneCode}}</option>
+                </select>
+                <input class="form-control" type="text" placeholder="Contact Number"
+                    name="tEmergencyContactNo"
+                    id="tEmergencyContactNo"
+                    formControlName="tEmergencyContactNo">
+            </div>
+        </div>
+        <div class="" *ngIf="!isTutor" formArrayName="gaurdiansList">
+            <div>
+                <input type="button" class="btn btn-success" (click)="addNewGaurdian();" value="Add Gaurdian" />
+            </div>
+            <section *ngFor="let g of profileForm.get('gaurdiansList').controls; let i= index"  [attr.data-index]="i" [formGroupName]="i">
+                <div>Gaurdian {{i+1}} Details</div>
+                <div *ngIf="i > 0">
+                    <input type="button" class="btn btn-danger" (click)="removeGaurdian(i);" value="Remove Gaurdian" />
+                </div>
+                <div class="form-group form-inline">
+                    <label>Name</label>
+                    <input class="form-control" type="text" placeholder="Name"
+                        name="gaurdianName"
+                        id="gaurdianName"
+                        formControlName="gaurdianName">
+                </div>
+                <div class="form-group form-inline">
+                    <label>Email</label>
+                    <input class="form-control" type="text" placeholder="Email"
+                        name="gaurdianEmail"
+                        id="gaurdianEmail"
+                        formControlName="gaurdianEmail">
+                </div>
+                <div class="form-group form-inline">
+                    <label>Contact Number</label>
+                    <select class="form-control" name="gaurdianCountryCode" formControlName="gaurdianCountryCode">
+                        <option *ngFor="let c of countriesList" value="c.countryTelephoneCode">{{c.countryTelephoneCode}}</option>
+                    </select>
+                    <input class="form-control" type="text" placeholder="Contact Number"
+                        name="gaurdianContactNo"
+                        id="gaurdianContactNo"
+                        formControlName="gaurdianContactNo">
+                </div>
+            </section>
+        </div>
+        <section>
+            <div>Address</div>
+            <div class="form-group form-inline">
+                <label>D.No/Street</label>
+                <input class="form-control" type="text" placeholder="D.No/Street"
+                    name="line1"
+                    id="line1"
+                    formControlName="line1">
+            </div>
+            <div class="form-group form-inline">
+                <label>City</label>
+                <input class="form-control" type="text" placeholder="City"
+                    name="city"
+                    id="city"
+                    formControlName="city">
+            </div>
+            <div class="form-group form-inline">
+                <label>Country</label>
+                <select class="form-control" name="countryCode" id="countryCode" formControlName="countryCode">
+                    <option *ngFor="let c of countriesList" value="c.countryCode">{{c.countryName}}</option>
+                </select>
+            </div>
+            <div class="form-group form-inline">
+                <label>State</label>
+                <select class="form-control" name="stateCode" id="stateCode" formControlName="stateCode">
+                    <option>AAAA</option>
+                    <option>BBB</option>
+                </select>
+            </div>
+            <div class="form-group form-inline">
+                <label>Pincode Number</label>
+                <input class="form-control" type="text" placeholder="Pincode Number"
+                    name="pinCode"
+                    id="pinCode"
+                    formControlName="pinCode">
+            </div>
+        </section>
+        <div *ngIf="isTutor">
+            <div class="form-group form-inline">
+                <label>Subjects</label>
+                <select class="form-control" name="subject" id="subject" formControlName="subject">
+                    <option *ngFor="let s of subjectsList" value="s.subCode">{{s.subName}}</option>
+                </select>
+            </div>
+        </div>
+        <div *ngIf="!isTutor" formArrayName="idMarksList">
+            <div class="form-group form-inline" *ngFor="let idMark of profileForm.get('idMarksList').controls; let i = index;"
+                [formGroupName]="i">
+                <label>Identification Marks {{ i + 1}}</label>
+                <input class="form-control" type="text" placeholder="Identification Marks {{ i + 1 }}"
+                    name="idMarks"
+                    id="idMarks"
+                    formControlName="idMarks">
+            </div>
+        </div>
+    </div>
+    <div class="col-3">
+        <div class="form-group  row">
+            <div class="col-5">
+                <label>Personal Photo</label>
+            </div>            
+            <div class="prof-photo col-5" (click)="selectFile();">
+                upload photo
+            </div>
+            <input type="file" 
+                name="profilePhoto"
+                id="profilePhoto" 
+                formControlName="profilePhoto" 
+                style="display: none;" 
+                #profilePhotoIp/>
+        </div>
+        <div *ngIf="isTutor">
+            <div class="t-classes-pt">
+                <div class="form-group di t-subj col-5">
+                    <label>Classes</label>
+                </div>
+                <div class="col-5 di">
+                        <p>10 C</p>
+                        <p>10 C</p>
+                        <p>10 C</p>
+                </div>
+            </div>
+            <div class="form-group form-inline">
+                <label>Assign Classes</label>
+            </div>
+            <div class="form-group">
+                <div class="form-group">
+                    <label>Class</label>
+                    <select class="form-control" name="teacherClass"
+                     id="teacherClass" 
+                     formControlName="teacherClass"
+                     (change)="onSelectOfTeacherClass($event)">
+                        <option *ngFor="let c of classDetails" value={{c.classCode}}>{{c.className}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Section</label>
+                    <select class="form-control">
+                        <option *ngFor="let c of sectionDetails" value="s.sectionCode">{{c.sectionName}}</option>
+                    </select>
+                </div>
+                <input type="button" class="btn btn-success" value="Assign" (click)="assignClassToTutor();" />
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" name="classTeacher"
+                    id="classTeacher"
+                    formControlName="classTeacher" value="Y" (click)="setClassTeachervalue($event)"> Class Teacher ?
+                </label>
+            </div>
+            <div *ngIf="checkForClassTeacher();">
+                <div class="form-group form-inline">
+                    <label>Class</label>
+                    <select class="form-control" name="tClassName"
+                        id="tClassName"
+                        formControlName="tClassName">
+                        <option *ngFor="let c of classDetails" value="s.classCode">{{c.className}}</option>
+                    </select>
+                </div>
+                <div class="form-group form-inline">
+                    <label>Section</label>
+                    <select class="form-control" name="tSectionName"
+                        id="tSectionName"
+                        formControlName="tSectionName">
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="!isTutor">
+            <div class="form-group form-inline">
+                <label>Class Name</label>
+                <select class="form-control" name="className" id="className" formControlName="className" (ngModelChange)="onSelectOfStudentClass($event)">
+                    <option *ngFor="let c of classDetails" value="s.classCode">{{c.className}}</option>
+                </select>
+            </div>
+            <div class="form-group form-inline">
+                <label>Section</label>
+                <select class="form-control" name="sectionName" id="sectionName" 
+                    formControlName="sectionName" >
+                    <option *ngFor="let c of classDetails" value="s.classCode">{{c.className}}</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group input-group col-12 prof-act-btns">
+            <button type="button" class="btn btn-danger form-inline" (click)="clearProfile();">Clear</button>
+            <button
+                type="submit"
+                class="btn btn-success form-inline"
+                [disabled]="!profileForm.valid" >Save</button>
+        </div>
+    </div>
+</form>
+</div>

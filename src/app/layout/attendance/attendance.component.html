@@ -1,0 +1,109 @@
+<!-- <mwl-demo-utils-calendar-header
+  [(view)]="view"
+  [(viewDate)]="viewDate">
+</mwl-demo-utils-calendar-header>
+
+<div class="text-center">
+  <button class="btn btn-primary" (click)="refreshView()">Refresh + re-render the current view</button>
+</div>
+
+<div [ngSwitch]="view">
+  <mwl-calendar-month-view
+    *ngSwitchCase="'month'"
+    [viewDate]="viewDate"
+    [events]="events"
+    [refresh]="refresh"
+    (beforeViewRender)="beforeMonthViewRender($event)">
+  </mwl-calendar-month-view>
+  <mwl-calendar-week-view
+    *ngSwitchCase="'week'"
+    [viewDate]="viewDate"
+    [events]="events"
+    [refresh]="refresh">
+  </mwl-calendar-week-view>
+  <mwl-calendar-day-view
+    *ngSwitchCase="'day'"
+    [viewDate]="viewDate"
+    [events]="events"
+    [refresh]="refresh">
+  </mwl-calendar-day-view>
+</div> -->
+<mwl-demo-utils-calendar-header [(view)]="view" [(viewDate)]="viewDate" (viewDateChange)="fetchEvents()" (viewChange)="fetchEvents()">
+</mwl-demo-utils-calendar-header>
+
+<ng-template #loading>
+    <div class="text-center">
+        <i class="fa fa-spin fa-spinner fa-5x"></i>
+        <br> Loading events...
+    </div>
+</ng-template>
+
+<ng-template #customCellTemplate let-day="day" let-locale="locale">
+    <div class="cal-cell-top">
+        <span class="cal-day-badge" *ngIf="day.badgeTotal > 0">{{ day.badgeTotal }}</span>
+        <span class="cal-day-number">{{ day.date | calendarDate:'monthViewDayNumber':locale }}</span>
+    </div>
+    <small style="margin: 5px" *ngIf="day.events.length !== 0 && day.events[0].meta.attendance.holiday">
+        <b>{{ day.events[0].meta.attendance.reason }}</b>
+    </small>
+</ng-template>
+
+<div *ngIf="events$ | async; else loading; let events">
+    <div [ngSwitch]="view">
+        <mwl-calendar-month-view *ngSwitchCase="'month'" [viewDate]="viewDate" [events]="events" [activeDayIsOpen]="activeDayIsOpen"
+            (dayClicked)="dayClicked($event.day)" (eventClicked)="eventClicked($event.event)" [cellTemplate]="customCellTemplate"
+            (beforeViewRender)="beforeMonthViewRender($event)">
+        </mwl-calendar-month-view>
+        <mwl-calendar-week-view *ngSwitchCase="'week'" [viewDate]="viewDate" [events]="events" (eventClicked)="eventClicked($event.event)">
+        </mwl-calendar-week-view>
+        <mwl-calendar-day-view *ngSwitchCase="'day'" [viewDate]="viewDate" [events]="events" (eventClicked)="eventClicked($event.event)">
+        </mwl-calendar-day-view>
+    </div>
+</div>
+<br>
+<div class="col col-sm-12 row">
+<div class="col col-sm-6">
+    <div class="card mb-3">
+        <div class="card-header">
+            Attendance Chart
+        </div>
+        <div class="card-body">
+            <!--(chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)" -->
+            <canvas baseChart height="180px" [data]="doughnutChartData" [labels]="doughnutChartLabels" [chartType]="doughnutChartType"
+                [colors]="lineChartColors">
+            </canvas>
+        </div>
+    </div>
+</div>
+
+<div class="col col-sm-6 row" style="height: 10%;">
+<div class="card mr-3">
+    <div class="card-body green-cell">
+        <h5 class="card-title">Days Present</h5>
+        <p class="card-text h2">{{presentDays}}</p>
+    </div>
+</div>
+
+<div class="card mr-3">
+        <div class="card-body red-cell">
+            <h5 class="card-title">Days Absent</h5>
+            <p class="card-text h2">{{absentDays}}</p>
+        </div>
+    </div>
+
+    <div class="card mr-3">
+            <div class="card-body bg-warning">
+                <h5 class="card-title">Holidays</h5>
+                <p class="card-text h2">{{holidays}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <calendar-heatmap
+    [data]="data"
+    [color]="color"
+    [overview]="overview"
+    (handler)="print($event)"
+    (onChange)="handleOnChange($event)">
+  </calendar-heatmap> -->

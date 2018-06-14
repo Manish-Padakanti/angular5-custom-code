@@ -1,0 +1,9 @@
+  .red-cell {
+      background-color: #dc3545 !important;
+    }
+    .green-cell {
+      background-color:#28a745 !important;
+    }
+    .cal-month-view .cal-day-cell:not(:last-child) {
+        border: 1px solid #e1e1e1;
+    }

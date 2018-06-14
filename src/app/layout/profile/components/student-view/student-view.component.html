@@ -1,0 +1,175 @@
+<div class="container">
+  <div class="row">
+    <div class="col-5">
+      <div class="prof-pic">
+        <div><img src="" /></div>
+      </div>
+      <div class="personal-det">
+        <div class="name-title">Saneep chegu</div>
+        <div class="class-det">X B</div>
+        <div class="detail-info" *ngIf="hideContactInfo">
+          <div class="drow">
+            <label class="lbl">Sex</label>
+            <span class="lbl-sep">:</span><span class="lbl-data">Male</span>
+          </div>
+          <div class="drow">
+            <label class="lbl">Adress</label>
+            <span class="lbl-sep">:</span><span class="lbl-data">CC, XX, XX, SLK</span>
+          </div>
+          <div class="drow">
+              <label class="lbl">Gaurdian Name</label>
+              <span class="lbl-sep">:</span><span class="lbl-data">XX XX</span>
+          </div>
+          <div class="drow">
+              <label class="lbl">Gaurdian Contact No.</label>
+              <span class="lbl-sep">:</span><span class="lbl-data">CC, XX, XX, SLK</span>
+          </div>
+          <div class="drow">
+              <label class="lbl">Gaurdian EmailId.</label>
+              <span class="lbl-sep">:</span><span class="lbl-data">CC, XX, XX, SLK</span>
+          </div>
+        </div>
+        <div class="hyperlink" (click)="showContactInfo($event);">Show Contact Info</div>
+		<div class="hyperlink" (click)="toggleShowMoreDetails($event);">Click here to for Chart View</div>		
+      </div>      
+    </div>
+    <div class="col-7">
+      <form class="notify-form">
+        <div class="form-group form-inline notify">
+          <textarea 
+              class="form-control" 
+              placeholder="First Name"
+              name="message"
+              rows="3"
+              cols="30"
+              id="message"></textarea>
+        </div>
+        <div class="form-group input-group notify-btn">
+            <button type="button" class="btn btn-success form-inline" (click)="notifyParent();">Notify Parent</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row calendar" *ngIf="!showMoreDetails">
+    <div class="col-6">
+      <ng-template #loading>
+        <div class="text-center">
+          <i class="fa fa-spin fa-spinner fa-5x"></i>
+          <br>
+          Loading events...
+        </div>
+      </ng-template>
+      <div *ngIf="showAttendance">
+        <span></span>
+        <mwl-calendar-month-view
+          [viewDate]="viewDate"
+          [events]="events"
+          (beforeViewRender)="beforeMonthViewRender($event)">
+        </mwl-calendar-month-view>
+      </div>
+    </div>
+    <div class="col-6">
+      <mat-table #table [dataSource]="examDataSource" class="exams-tbl" *ngIf="showExamsListTable">
+        <!-- Position Column -->
+        <ng-container matColumnDef="examName">
+          <mat-header-cell *matHeaderCellDef> Exam </mat-header-cell>
+          <mat-cell *matCellDef="let element" class="exam-name"> {{element.examName}} </mat-cell>
+        </ng-container>
+    
+        <!-- Name Column -->
+        <ng-container matColumnDef="gainedMarks">
+          <mat-header-cell *matHeaderCellDef> Score </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.gainedMarks}} </mat-cell>
+        </ng-container>
+    
+        <!-- Weight Column -->
+        <ng-container matColumnDef="totalMarks">
+          <mat-header-cell *matHeaderCellDef> Max. Marks </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.totalMarks}} </mat-cell>
+        </ng-container>
+    
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="rank">
+          <mat-header-cell *matHeaderCellDef> Rank </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.rank}} </mat-cell>
+        </ng-container>
+    
+        <mat-header-row *matHeaderRowDef="examColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: examColumns;" (click)="onSelectOfExam(row)"></mat-row>
+      </mat-table>
+      <div *ngIf="showExamDetailsTable" style="float: right;">
+          <button type="button" class="btn btn-success form-inline" (click)="showExamsList();">Back</button>
+      </div>
+      <mat-table style="clear: both;" #table [dataSource]="examDetailsDataSource" class="exams-tbl" *ngIf="showExamDetailsTable">
+        <!-- Position Column -->
+        <ng-container matColumnDef="subjectName">
+          <mat-header-cell *matHeaderCellDef> Subject Name </mat-header-cell>
+          <mat-cell *matCellDef="let element" class="exam-name"> {{element.subjectName}} </mat-cell>
+        </ng-container>
+    
+        <!-- Name Column -->
+        <ng-container matColumnDef="gainedMarks">
+          <mat-header-cell *matHeaderCellDef> Score </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.gainedMarks}} </mat-cell>
+        </ng-container>
+    
+        <!-- Weight Column -->
+        <ng-container matColumnDef="totalMarks">
+          <mat-header-cell *matHeaderCellDef> Max. Marks </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.totalMarks}} </mat-cell>
+        </ng-container>
+    
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="rank">
+          <mat-header-cell *matHeaderCellDef> Rank </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.rank}} </mat-cell>
+        </ng-container>
+    
+        <mat-header-row *matHeaderRowDef="examDetailsColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: examDetailsColumns;"></mat-row>
+      </mat-table>
+    </div>
+  </div>
+ 
+  <!-- charts reprsentation -->
+  <div class="row" *ngIf="showMoreDetails">
+    <div class="col-6">
+      <canvas *ngIf="showExamsChart" baseChart [datasets]="examChartData" [labels]="examChartLabels" [options]="examChartOptions" [legend]="examChartLegend" [chartType]="examChartType">
+      </canvas>
+    </div>
+    <div class="col-6">
+      <canvas *ngIf="showRankChart" baseChart [datasets]="ranksChartData" [labels]="examChartLabels" [options]="ranksChartOptions" [legend]="ranksChartLegend" [chartType]="ranksChartType">
+      </canvas>        
+    </div>
+  </div>
+  <form novalidate [formGroup]="examsFormGroup" *ngIf="showMoreDetails">
+    <div class="row">
+      <div class="col-6">
+          <div class="form-group">
+              <label>Select Exam</label>
+              <select class="form-control" id="examName" name="examName" formControlName="examName" (ngModelChange)="onSelectOfExamType($event)" >
+                <option *ngFor="let e of examDataSource" [ngValue]="e.examCode">{{e.examName}}</option>
+              </select>
+          </div>
+      </div>
+      <div class="col-6">
+          <div class="form-group">
+              <label>Select Subject</label>
+              <select class="form-control" id="subjectName" name="subjectName" formControlName="subjectName" (ngModelChange)="onSelectOfSubjectType($event)">
+                <option *ngFor="let e of subjectsList" [ngValue]="e.subjectCode">{{e.subjectName}}</option>
+              </select>
+          </div>
+      </div>
+  </div>
+</form>
+<div class="row" *ngIf="showMoreDetails">
+  <div class="col-6">
+      <canvas *ngIf="showExamChartDetails" baseChart [datasets]="examDetailsChartData" [labels]="examDetailsChartLabels" [options]="examDetailsChartOptions" [legend]="examDetailsChartLegend" [chartType]="examDetailsChartType">
+      </canvas>
+  </div>
+  <div class="col-6">
+      <canvas *ngIf="showSubjectChartDetails" baseChart [datasets]="subjectDetailsChartData" [labels]="subjectDetailsChartLabels" [options]="subjectDetailsChartOptions" [legend]="subjectDetailsChartLegend" [chartType]="subjectDetailsChartType">
+      </canvas>
+  </div>
+</div>
+</div>
